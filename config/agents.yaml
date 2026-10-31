@@ -1,0 +1,77 @@
+# One entry per AI agent.
+#   model:        any OpenRouter model id (https://openrouter.ai/models)
+#   temperature:  0 = predictable, 1 = creative
+#   prompt:       the system prompt file in prompts/ (edit the text there)
+#   vision:       true if the agent is sent page images (the model must accept images)
+#
+# You can also override a model from .env without touching this file:
+#   MODEL_SCRIPT_WRITER=anthropic/claude-sonnet-4.5
+# Changes to this file and to prompts/ are picked up on the next request; no restart needed.
+
+document_analyst:
+  # Reads pages that have no text layer (scans) or that hold figures/tables/equations.
+  # Needs strong vision at low cost.
+  model: google/gemini-2.5-flash
+  temperature: 0.1
+  prompt: document_analyst.md
+  vision: true
+
+request_interpreter:
+  # Turns the user's message into a scope (which PDFs/pages/topics) and a list of needs.
+  model: openai/gpt-4.1-mini
+  temperature: 0.1
+  prompt: request_interpreter.md
+
+learning_designer:
+  # Plans the episode: segments, order, key points, and the "basics" segment when asked.
+  model: openai/gpt-4.1-mini
+  temperature: 0.2
+  prompt: learning_designer.md
+
+script_writer:
+  # Writes the spoken script. The most important model for how the podcast sounds.
+  model: openai/gpt-4.1-mini
+  temperature: 0.8
+  prompt: script_writer.md
+
+audience_editor:
+  # Adapts the wording of an accurate script to the chosen age group (below 12 / 12 and above).
+  # Runs before the Reviewer, so any change of meaning is caught.
+  model: openai/gpt-4.1-mini
+  temperature: 0.4
+  prompt: audience_editor.md
+
+reviewer:
+  # Fact-checks the script against the source. Deliberately a different model family
+  # from the writer, so the writer is not grading its own work.
+  model: google/gemini-2.5-flash
+  temperature: 0.0
+  prompt: reviewer.md
+  prompt_foundations: reviewer_foundations.md
+
+speech_director:
+  # Picks a delivery style per line and writes speech-safe text for formulas and symbols.
+  # Small, cheap model: it must not change the teaching content.
+  model: google/gemini-2.5-flash-lite
+  temperature: 0.2
+  prompt: speech_director.md
+
+host_framer:
+  # Writes ONLY the welcome (first segment) and the goodbye (last segment), in the style of the format
+  # (class greeting for teacher-student, show welcome for interview, ...). A light, fast model is enough.
+  model: google/gemini-2.5-flash-lite
+  temperature: 0.6
+  prompt: host_framer.md
+
+ui_translator:
+  # Used only by "python -m app.build_ui_text" to write the interface text in other languages (once, offline).
+  model: google/gemini-2.5-flash
+  temperature: 0.2
+  prompt: ui_translator.md
+
+final_checker:
+  # Last check before speech: does the line that will be SPOKEN (translation, or speech form) say the same as
+  # the APPROVED line? Numbers, negations, terms. Short pairs only, so a light model is enough.
+  model: google/gemini-2.5-flash
+  temperature: 0
+  prompt: final_checker.md

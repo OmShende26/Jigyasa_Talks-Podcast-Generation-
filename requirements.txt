@@ -1,0 +1,9 @@
+fastapi
+uvicorn[standard]
+python-multipart
+python-dotenv
+pymupdf
+requests
+pyyaml
+python-docx
+python-pptx

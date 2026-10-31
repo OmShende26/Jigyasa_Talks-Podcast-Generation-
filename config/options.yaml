@@ -1,0 +1,341 @@
+# The choices a user sees, and the prompt text each choice adds to the agents' instructions.
+# Edit labels, blurbs and prompt text freely. Keep the ids (the keys) stable: saved sessions refer to them.
+# In prompts, {{a}} and {{b}} are replaced by the speakers' names (HOST_A_NAME / HOST_B_NAME in .env).
+
+defaults:
+  language: en
+  age: secondary
+  format: friends
+  subject: general
+  length: standard
+  depth: standard
+  basics: false
+
+# ------------------------------------------------------------------ audience
+# The Audience Editor agent adapts the approved script to the chosen age group (prompt: prompts/audience_editor.md).
+# opening / closing tell the Script Writer how to start and end the podcast for this age group.
+ages:
+  primary:
+    label: Primary (Class 1-5)
+    blurb: Ages 6-10. Very simple words, short sentences, playful examples.
+    prompt: >-
+      AUDIENCE: CHILDREN IN PRIMARY SCHOOL (CLASS 1-5, AGES 6-10). Use very simple, everyday words and short
+      sentences (mostly under 10 words). Explain every new word the moment it appears. Use concrete examples from
+      a child's world (home, school, playground, food, animals). Keep a warm, cheerful, encouraging tone. Never
+      talk down to the listener.
+    opening: >-
+      Open with a cheerful hello: each speaker says their name in a friendly way, then together they say what
+      today's topic is in one simple sentence that makes it sound exciting.
+    closing: >-
+      End with a cheerful goodbye from both speakers that says "happy learning" and "see you again next time",
+      in a playful, warm way.
+  middle:
+    label: Middle school (Class 6-8)
+    blurb: Ages 11-13. Simple language, terms explained, relatable examples.
+    prompt: >-
+      AUDIENCE: CHILDREN IN MIDDLE SCHOOL (CLASS 6-8, AGES 11-13). Use simple, clear language and short sentences.
+      Introduce subject terms gently and explain each one in plain words. Use examples from daily life and school.
+      Keep a friendly, curious, encouraging tone.
+    opening: >-
+      Open with a friendly hello: each speaker says their name, then they name today's topic in one sentence that
+      makes it sound interesting.
+    closing: >-
+      End with a friendly goodbye from both speakers that says "happy learning" and "see you again next time".
+  secondary:
+    label: Secondary (Class 9-10)
+    blurb: Ages 14-15. Proper terms with reasoning, exam-relevant clarity.
+    prompt: >-
+      AUDIENCE: LEARNERS IN SECONDARY SCHOOL (CLASS 9-10, AGES 14-15). Use the correct subject terms, explaining
+      each one briefly the first time it appears. Show the reasoning behind ideas, not just the facts. Use examples
+      a teenager relates to. Keep a friendly, confident tone without being childish.
+    opening: >-
+      Open with a short welcome: each speaker introduces themselves by name, then they name today's topic and
+      say in one sentence why it matters.
+    closing: >-
+      End with a short, friendly goodbye that says "happy learning" and "see you again next time".
+  senior:
+    label: Senior secondary (Class 11-12)
+    blurb: Ages 16-18. Precise terms, deeper reasoning, connections between ideas.
+    prompt: >-
+      AUDIENCE: LEARNERS IN SENIOR SECONDARY (CLASS 11-12, AGES 16-18). Use precise subject terminology and
+      explain the reasoning and connections between ideas in depth. Examples can be more abstract or real-world.
+      Keep a confident, engaging, peer-like tone.
+    opening: >-
+      Open with a short welcome: each speaker introduces themselves by name, then they name today's topic and
+      say in one sentence why it matters.
+    closing: >-
+      End with a short, friendly goodbye that says "happy learning" and "see you again next time".
+
+# ------------------------------------------------------------------ format (who is talking)
+# a_role / b_role are shown next to the names in the player. null = no role label.
+formats:
+  friends:
+    label: Two friends talking
+    blurb: Relaxed and curious, like two friends working it out together.
+    title: TWO FRIENDS TALKING
+    solo: false
+    a_role: null
+    b_role: null
+    opening: >-
+      Two friends start a casual chat: a relaxed "hey" to the listeners, both say their names, and they say what
+      they are talking about today in a way that makes it sound interesting.
+    closing: >-
+      The friends wrap up casually, thank each other, and say goodbye to the listeners with "happy learning" and
+      "see you again next time".
+    prompt: >-
+      Two friends are chatting. {{a}} (speaker A) is curious: asks the questions a student would ask, reacts,
+      and now and then says an idea back in their own words. {{b}} (speaker B) has studied the material and
+      explains it clearly with simple everyday analogies. Warm and relaxed, light humour is welcome, never at
+      the cost of accuracy. Write a natural spoken conversation, not a lecture.
+  teacher_student:
+    label: Teacher and student
+    blurb: A patient teacher answers a student's questions.
+    title: TEACHER AND STUDENT
+    solo: false
+    a_role: Student
+    b_role: Teacher
+    opening: >-
+      Open like a real class. The TEACHER (speaker B) speaks first and greets the class the way an Indian teacher
+      would ("Good morning, students!" / in Hindi "सुप्रभात बच्चों!", for younger classes "Hello children!"),
+      says their own name, and announces the lesson: "Today we are going to learn about ...". The student
+      (speaker A) greets the teacher back ("Good morning, ma'am/sir", using the teacher's name if natural), says
+      their name and shows they are eager to learn.
+    closing: >-
+      The teacher closes the class: "That's all for today's class, students", a one-line encouragement, then
+      "happy learning" and "see you in the next class / see you again next time". The student thanks the teacher.
+    prompt: >-
+      A teacher and a student in a one-to-one lesson. The student ({{a}}, speaker A) asks the questions a real
+      student would have and sometimes tries to say an idea back in their own words. The teacher ({{b}},
+      speaker B) explains step by step and answers kindly. If the student states a common misconception, the
+      teacher corrects it in the very next turn. Patient, clear and encouraging.
+  interview:
+    label: Interview with an expert
+    blurb: A host asks the questions, an expert answers.
+    title: INTERVIEW WITH AN EXPERT
+    solo: false
+    a_role: Host
+    b_role: Expert
+    opening: >-
+      The HOST (speaker A) welcomes the listeners to the show, says their own name, introduces today's guest
+      expert by name, and names today's topic. The expert briefly thanks the host for having them.
+    closing: >-
+      The host thanks the expert, the expert thanks the host, and the host says goodbye to the listeners with
+      "happy learning" and "see you again next time".
+    prompt: >-
+      A podcast interview. The host ({{a}}, speaker A) asks well-prepared questions and keeps the conversation
+      moving. The expert ({{b}}, speaker B) answers clearly and concretely. The expert speaks only about what the
+      material covers and never claims personal experience, research or credentials, and tells no anecdotes.
+  solo:
+    label: Single narrator
+    blurb: One voice explains it to you directly.
+    title: SINGLE NARRATOR
+    solo: true
+    a_role: Narrator
+    b_role: Narrator
+    opening: >-
+      The narrator (speaker A only) greets the listener directly ("Hello and welcome!"), says their name and
+      tells the listener what they will learn today.
+    closing: >-
+      The narrator says goodbye to the listener directly with "happy learning" and "see you again next time".
+    prompt: >-
+      One narrator ({{a}}) talks straight to the listener, using direct address ("you") and the occasional
+      rhetorical question. Use ONLY speaker A for every turn, and split the talk into short turns of 2 to 4
+      sentences.
+
+# ------------------------------------------------------------------ subject
+subjects:
+  general:
+    label: General
+    blurb: Balanced explanations for any subject.
+    prompt: >-
+      SUBJECT: GENERAL. Explain clearly for a school student and focus on the main ideas.
+  science:
+    label: Science
+    blurb: Precise definitions, processes in order, experiments.
+    prompt: >-
+      SUBJECT: SCIENCE (exam-focused). Give precise definitions in simple words. Explain processes step by step
+      and in order, and link each cause to its effect. Say units and quantities clearly. Describe experiments as
+      aim, what you do, what you observe and what it shows. Point out the misconceptions the source itself
+      addresses. When a law or formula appears, say it in words and say what each quantity means.
+  social:
+    label: Social Studies
+    blurb: Dates, causes and consequences, exactly as in the book.
+    prompt: >-
+      SUBJECT: SOCIAL STUDIES (exam-focused). Keep names, places and dates exactly as in the source. Put events
+      in time order and tie each one to its cause and its consequence. Compare and contrast where the source
+      does. Explain terms (like "sovereignty") in simple words. Describe maps and timelines in words. On
+      contested topics stay neutral and report what the text says.
+  maths:
+    label: Mathematics
+    blurb: Formulas in words, worked examples step by step.
+    prompt: >-
+      SUBJECT: MATHEMATICS (exam-focused). Say every formula in words ("a plus b, all squared, equals ...").
+      Walk through each worked example from the source slowly, one step at a time, naming the rule used at each
+      step and why. Say numbers in full. Mention the common mistakes. Never read symbols or equations character
+      by character.
+  english:
+    label: English
+    blurb: Themes, characters, devices, vocabulary; grammar rules.
+    prompt: >-
+      SUBJECT: ENGLISH (exam-focused). For a story, essay or poem: cover the main theme, the order of events or
+      ideas, the characters and their traits, the writer's message and the literary devices, using only what
+      the text supports. Explain difficult vocabulary in simple words. Quote only short phrases from the text,
+      never long passages. For a grammar lesson: state the rule, give the source's examples and name the
+      typical errors.
+
+# ------------------------------------------------------------------ length
+# custom: the user types the number of minutes (min_minutes to max_minutes).
+lengths:
+  short:    {label: Short,    blurb: About 5 minutes,  minutes: 5}
+  standard: {label: Standard, blurb: About 10 minutes, minutes: 10}
+  long:     {label: Long,     blurb: About 20 minutes, minutes: 20}
+  custom:   {label: Custom,   blurb: Choose the minutes, minutes: 10, min_minutes: 1, max_minutes: 30}
+
+# ------------------------------------------------------------------ detail level
+# custom: the user describes the detail level in their own words; {{note}} is replaced by that text.
+depths:
+  overview:
+    label: Overview
+    blurb: The main ideas only.
+    key_points: 2 to 3
+    factor: 0.8        # max spoken words per source word; stops short material being padded
+    prompt: >-
+      DETAIL: OVERVIEW. Cover only the main ideas: one clear sentence per idea, at most one short example for
+      the hardest idea, no side details. Keep it brisk.
+  standard:
+    label: Standard
+    blurb: Each key idea explained, with an example.
+    key_points: 3 to 5
+    factor: 1.2
+    prompt: >-
+      DETAIL: STANDARD. Explain each core idea with the intuition behind it and one example taken from the
+      source. Leave out minor details.
+  detailed:
+    label: Detailed
+    blurb: Every definition, step and worked example.
+    key_points: 5 to 8
+    factor: 1.8
+    prompt: >-
+      DETAIL: DETAILED. Cover the material thoroughly: every definition, step of reasoning, worked example and
+      exception in the source, plus the common mistakes and tricky points.
+  custom:
+    label: Custom
+    blurb: Describe the level of detail you want.
+    key_points: 3 to 6
+    factor: 1.4
+    prompt: >-
+      DETAIL: AS REQUESTED BY THE STUDENT: {{note}}
+
+# Added to the writer's instructions when "Explain the background first" is ticked; the Learning Designer
+# then adds an opening segment on the prerequisite ideas.
+basics_prompt: >-
+  The listener is new to this topic. Use plain words, explain each term the first time it is used, and build up
+  gradually.
+
+# ------------------------------------------------------------------ delivery (Speech Director)
+# bodhan_style is sent to Bodhan TTS as "style". Empty = the voice's neutral reading. Must be EXACTLY one of:
+#   AIR style news, Customer Care, TV style news, advertisements, anger, children's stories, disgust,
+#   educational lecture, fear, happy, news, sad, single person narration audiobook, surprise
+deliveries:
+  # The Speech Director picks one delivery per line; each maps to a Bodhan TTS style ("" = the voice's neutral
+  # reading). Bodhan's styles: AIR style news, Customer Care, TV style news, advertisements, anger,
+  # children's stories, disgust, educational lecture, fear, happy, news, sad, single person narration audiobook,
+  # surprise. anger, disgust and fear are deliberately never used in a learning podcast.
+  warm:       {label: Warm and welcoming, bodhan_style: "happy",
+               use: "welcomes, goodbyes, praise and encouragement"}
+  explaining: {label: Engaging teacher,   bodhan_style: "educational lecture",
+               use: "most teaching lines: explaining an idea, a process, a cause"}
+  curious:    {label: Curious question,   bodhan_style: "",
+               use: "questions and short reactions from the listener's side"}
+  amazed:     {label: Amazed,             bodhan_style: "surprise",
+               use: "a genuinely surprising fact or a 'wow, really?' reaction (use sparingly)"}
+  story:      {label: Storytelling,       bodhan_style: "children's stories",
+               use: "an analogy, an everyday example or a little story that makes an idea concrete"}
+  narrating:  {label: Narration,          bodhan_style: "single person narration audiobook",
+               use: "longer flowing narration, describing a scene, a history or a sequence of events"}
+  serious:    {label: Serious,            bodhan_style: "news",
+               use: "serious or sad facts (disasters, diseases, loss, conflict), said respectfully"}
+  calm:       {label: Calm and precise,   bodhan_style: "",
+               use: "numbers, definitions, formulas and step-by-step reasoning, said slowly and clearly"}
+  lively:     {label: Lively,             bodhan_style: "happy",
+               use: "light, fun moments and jokes (use sparingly)"}
+
+# A better-suited style for a listener level or a format (applied after the Speech Director's choice).
+style_overrides:
+  ages:
+    primary:   {explaining: "children's stories", calm: "children's stories"}   # young children: storyteller voice
+  formats:
+    solo:      {explaining: "single person narration audiobook"}                 # one narrator: audiobook voice
+    interview: {curious: "TV style news"}                                        # the host's questions
+
+# ------------------------------------------------------------------ languages
+# Codes are Bodhan's codes. script: the writing system.
+# via:        leave out to have the agents write the script directly in this language. Set to en (or hi) to
+#             have them write and fact-check in that language, then translate with Bodhan before speech.
+# understood: false = the LLMs cannot read PDFs in this language reliably. Such PDFs are read with Bodhan OCR
+#             and translated to English before the agents see them.
+languages:
+  en:  {label: English,               name: English,   script: Latin}
+  hi:  {label: Hindi (हिन्दी),          name: Hindi,     script: Devanagari}
+  bn:  {label: Bengali (বাংলা),         name: Bengali,   script: Bengali,          via: en}
+  ta:  {label: Tamil (தமிழ்),           name: Tamil,     script: Tamil,            via: en}
+  te:  {label: Telugu (తెలుగు),         name: Telugu,    script: Telugu,           via: en}
+  mr:  {label: Marathi (मराठी),         name: Marathi,   script: Devanagari,       via: en}
+  gu:  {label: Gujarati (ગુજરાતી),       name: Gujarati,  script: Gujarati,         via: en}
+  kn:  {label: Kannada (ಕನ್ನಡ),         name: Kannada,   script: Kannada,          via: en}
+  ml:  {label: Malayalam (മലയാളം),      name: Malayalam, script: Malayalam,        via: en}
+  pa:  {label: Punjabi (ਪੰਜਾਬੀ),        name: Punjabi,   script: Gurmukhi,         via: en}
+  or:  {label: Odia (ଓଡ଼ିଆ),            name: Odia,      script: Odia,             via: en}
+  ur:  {label: Urdu (اردو),            name: Urdu,      script: Perso-Arabic (Nastaliq), via: en}
+  ne:  {label: Nepali (नेपाली),         name: Nepali,    script: Devanagari,       via: en}
+  as:  {label: Assamese (অসমীয়া),      name: Assamese,  script: Bengali-Assamese, via: en, understood: false}
+  sa:  {label: Sanskrit (संस्कृतम्),      name: Sanskrit,  script: Devanagari,       via: en, understood: false}
+  kok: {label: Konkani (कोंकणी),        name: Konkani,   script: Devanagari,       via: en, understood: false}
+  mai: {label: Maithili (मैथिली),       name: Maithili,  script: Devanagari,       via: en, understood: false}
+  doi: {label: Dogri (डोगरी),           name: Dogri,     script: Devanagari,       via: en, understood: false}
+  brx: {label: Bodo (बड़ो),              name: Bodo,      script: Devanagari,       via: en, understood: false}
+  ks:  {label: Kashmiri (کٲشُر),        name: Kashmiri,  script: Perso-Arabic,     via: en, understood: false}
+  sd:  {label: Sindhi (सिन्धी),         name: Sindhi,    script: Devanagari,       via: en, understood: false}
+  mni: {label: Manipuri (মৈতৈলোন্),     name: Manipuri,  script: Bengali,          via: en, understood: false}
+  sat: {label: Santali (ᱥᱟᱱᱛᱟᱲᱤ),      name: Santali,   script: Ol Chiki,         via: en, understood: false}
+
+# Added to the Script Writer's instructions. {{language}} and {{script}} are filled in.
+language_rule: >-
+  LANGUAGE: Write every spoken line in {{language}}, in the {{script}} script, even if the source is in another
+  language: translate the meaning faithfully, do not translate word by word. Use the words a school teacher in
+  that language would naturally use. Where students normally say an English technical term, you may keep it, but
+  write it in the {{script}} script so the speech engine reads it correctly. Write numbers as words in {{language}}.
+  Names in the JSON ("speaker", "refs") stay as they are.
+
+# ------------------------------------------------------------------ interface languages
+# Languages the app's buttons and labels can be shown in. Each needs static/i18n/<code>.json, made once with
+#   python -m app.build_ui_text
+# (Gemini writes natural wording, not word-for-word translation). Switching is instant afterwards.
+ui_languages:
+  en: English
+  hi: हिन्दी
+  mr: मराठी
+  gu: ગુજરાતી
+  bn: বাংলা
+  pa: ਪੰਜਾਬੀ
+  ta: தமிழ்
+  te: తెలుగు
+  kn: ಕನ್ನಡ
+  ml: മലയാളം
+  or: ଓଡ଼ିଆ
+  ur: اردو
+
+# The app's name in each interface language (written in that script; never machine-translated).
+app_names:
+  en: Jigyasa Talks
+  hi: जिज्ञासा टॉक्स
+  mr: जिज्ञासा टॉक्स
+  gu: જિજ્ઞાસા ટૉક્સ
+  bn: জিজ্ঞাসা টক্স
+  pa: ਜਿਗਿਆਸਾ ਟਾਕਸ
+  ta: ஜிக்ஞாசா டாக்ஸ்
+  te: జిజ్ఞాస టాక్స్
+  kn: ಜಿಜ್ಞಾಸಾ ಟಾಕ್ಸ್
+  ml: ജിജ്ഞാസ ടോക്സ്
+  or: ଜିଜ୍ଞାସା ଟକ୍ସ
+  ur: جگیاسا ٹاکس

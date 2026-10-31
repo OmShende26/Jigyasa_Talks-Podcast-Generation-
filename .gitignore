@@ -1,0 +1,39 @@
+# --- Secrets: never commit real keys (commit .env.example instead) ---
+.env
+.env.*
+!.env.example
+
+# --- Runtime data: sessions, uploaded files, generated audio, measured speech rates ---
+data/
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# --- Virtual environments ---
+.venv/
+venv/
+env/
+podenv/
+
+# --- Music: keep your own intro/outro out of the repo unless you have the right to share them ---
+# (delete these two lines if the tracks are licensed for redistribution)
+assets/*.mp3
+assets/*.wav
+
+# --- Editors and OS files ---
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# --- Logs, test output and release archives ---
+*.log
+music_check*.mp3
+*.zip
